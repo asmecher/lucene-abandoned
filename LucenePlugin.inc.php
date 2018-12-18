@@ -109,7 +109,7 @@ class LucenePlugin extends GenericPlugin {
 
 			// Register callbacks (data-access level).
 			HookRegistry::register('articledao::getAdditionalFieldNames', array($this, 'callbackArticleDaoAdditionalFieldNames'));
-			$customRanking = (boolean)$this->getSetting(0, 'customRanking');
+			$customRanking = (boolean)$this->getSetting(CONTEXT_SITE, 'customRanking');
 			if ($customRanking) {
 				HookRegistry::register('sectiondao::getAdditionalFieldNames', array($this, 'callbackSectionDaoAdditionalFieldNames'));
 			}
@@ -136,7 +136,7 @@ class LucenePlugin extends GenericPlugin {
 
 			// Register callbacks (view-level).
 			HookRegistry::register('TemplateManager::display',array($this, 'callbackTemplateDisplay'));
-			if ($this->getSetting(0, 'autosuggest')) {
+			if ($this->getSetting(CONTEXT_SITE, 'autosuggest')) {
 				HookRegistry::register('Templates::Search::SearchResults::FilterInput', array($this, 'callbackTemplateFilterInput'));
 			}
 			if ($customRanking) {
@@ -147,11 +147,11 @@ class LucenePlugin extends GenericPlugin {
 			HookRegistry::register('Templates::Search::SearchResults::SyntaxInstructions', array($this, 'callbackTemplateSyntaxInstructions'));
 
 			// Instantiate the web service.
-			$searchHandler = $this->getSetting(0, 'searchEndpoint');
-			$username = $this->getSetting(0, 'username');
-			$password = $this->getSetting(0, 'password');
-			$instId = $this->getSetting(0, 'instId');
-			$useProxySettings = $this->getSetting(0, 'useProxySettings');
+			$searchHandler = $this->getSetting(CONTEXT_SITE, 'searchEndpoint');
+			$username = $this->getSetting(CONTEXT_SITE, 'username');
+			$password = $this->getSetting(CONTEXT_SITE, 'password');
+			$instId = $this->getSetting(CONTEXT_SITE, 'instId');
+			$useProxySettings = $this->getSetting(CONTEXT_SITE, 'useProxySettings');
 			if (!$useProxySettings) $useProxySettings = false;
 
 			$this->_solrWebService = new SolrWebService($searchHandler, $username, $password, $instId, $useProxySettings);
@@ -401,7 +401,7 @@ class LucenePlugin extends GenericPlugin {
 		$resultSetOrderingOptions =& $params[1];
 
 		// Only show the "popularity" option when sorting-by-metric is enabled.
-		if (!$this->getSetting(0, 'sortingByMetric')) {
+		if (!$this->getSetting(CONTEXT_SITE, 'sortingByMetric')) {
 			unset($resultSetOrderingOptions['popularityAll'], $resultSetOrderingOptions['popularityMonth']);
 		}
 	}
@@ -429,11 +429,11 @@ class LucenePlugin extends GenericPlugin {
 		$searchRequest->setExcludedIds($exclude);
 
 		// Configure alternative spelling suggestions.
-		$spellcheck = (boolean)$this->getSetting(0, 'spellcheck');
+		$spellcheck = (boolean)$this->getSetting(CONTEXT_SITE, 'spellcheck');
 		$searchRequest->setSpellcheck($spellcheck);
 
 		// Configure highlighting.
-		$highlighting = (boolean)$this->getSetting(0, 'highlighting');
+		$highlighting = (boolean)$this->getSetting(CONTEXT_SITE, 'highlighting');
 		$searchRequest->setHighlighting($highlighting);
 
 		// Configure faceting.
@@ -447,7 +447,7 @@ class LucenePlugin extends GenericPlugin {
 		$searchRequest->setFacetCategories($facetCategories);
 
 		// Configure custom ranking.
-		$customRanking = (boolean)$this->getSetting(0, 'customRanking');
+		$customRanking = (boolean)$this->getSetting(CONTEXT_SITE, 'customRanking');
 		if ($customRanking) {
 			$sectionDao = DAORegistry::getDAO('SectionDAO'); /* @var $sectionDao SectionDAO */
 			if (is_a($journal, 'Journal')) {
@@ -468,7 +468,7 @@ class LucenePlugin extends GenericPlugin {
 		}
 
 		// Configure ranking-by-metric.
-		$rankingByMetric = (boolean)$this->getSetting(0, 'rankingByMetric');
+		$rankingByMetric = (boolean)$this->getSetting(CONTEXT_SITE, 'rankingByMetric');
 		if ($rankingByMetric) {
 			// The 'usageMetricAll' field is an external file field containing
 			// multiplicative boost values calculated from usage metrics and
@@ -589,7 +589,7 @@ class LucenePlugin extends GenericPlugin {
 	function callbackArticleChangesFinished($hookName, $params) {
 		// In the case of pull-indexing we ignore this call
 		// and let the Solr server initiate indexing.
-		if ($this->getSetting(0, 'pullIndexing')) return true;
+		if ($this->getSetting(CONTEXT_SITE, 'pullIndexing')) return true;
 
 		// If the plugin is configured to push changes to the
 		// server then we'll now batch-update all articles that
@@ -749,14 +749,14 @@ class LucenePlugin extends GenericPlugin {
 		$templateMgr->addStylesheet('lucene', $request->getBaseUrl() . '/' . $this->getPluginPath() . '/templates/lucene.css');
 
 		// Instant search.
-		if ($this->getSetting(0, 'instantSearch')) {
+		if ($this->getSetting(CONTEXT_SITE, 'instantSearch')) {
 			$instantSearch = (boolean)$request->getUserVar('instantSearch');
 			$templateMgr->assign('instantSearch', $instantSearch);
 			$templateMgr->assign('instantSearchEnabled', true);
 		}
 
 		// Similar documents.
-		if ($this->getSetting(0, 'simdocs')) {
+		if ($this->getSetting(CONTEXT_SITE, 'simdocs')) {
 			$templateMgr->assign('simDocsEnabled', true);
 		}
 
@@ -796,7 +796,7 @@ class LucenePlugin extends GenericPlugin {
 	 */
 	function callbackTemplateAdditionalArticleInfo($hookName, $params) {
 		// Check whether the "highlighting" feature is enabled.
-		if (!$this->getSetting(0, 'highlighting')) return false;
+		if (!$this->getSetting(CONTEXT_SITE, 'highlighting')) return false;
 
 		// Check and prepare the article parameter.
 		$hookParams = $params[0];
@@ -860,7 +860,7 @@ class LucenePlugin extends GenericPlugin {
 		// - a "main metric" is not configured
 		$application = Application::getApplication();
 		$metricType = $application->getDefaultMetricType();
-		if (!($this->getSetting(0, 'rankingByMetric') || $this->getSetting(0, 'sortingByMetric')) ||
+		if (!($this->getSetting(CONTEXT_SITE, 'rankingByMetric') || $this->getSetting(CONTEXT_SITE, 'sortingByMetric')) ||
 				empty($metricType)) return;
 
 		// Retrieve a usage report for all articles ordered by the article ID.
@@ -884,7 +884,7 @@ class LucenePlugin extends GenericPlugin {
 		if ($max <= 0) return;
 
 		// Get the Lucene plugin installation ID.
-		$instId = $this->getSetting(0, 'instId');
+		$instId = $this->getSetting(CONTEXT_SITE, 'instId');
 
 		$file = null;
 		if (is_string($output)) {
@@ -926,7 +926,7 @@ class LucenePlugin extends GenericPlugin {
 				'journalTitle', 'authors', 'publicationDate'
 			);
 			foreach($availableFacetCategories as $facetCategory) {
-				if ($this->getSetting(0, 'facetCategory' . ucfirst($facetCategory))) {
+				if ($this->getSetting(CONTEXT_SITE, 'facetCategory' . ucfirst($facetCategory))) {
 					$this->_enabledFacetCategories[] = $facetCategory;
 				}
 			}
@@ -979,7 +979,7 @@ class LucenePlugin extends GenericPlugin {
 				$numMarked = $this->_solrWebService->markJournalChanged($journal->getId());
 
 				// Pull or push?
-				if ($this->getSetting(0, 'pullIndexing')) {
+				if ($this->getSetting(CONTEXT_SITE, 'pullIndexing')) {
 					// When pull-indexing is configured then we leave it up to the
 					// Solr server to decide when the updates will actually be done.
 					$this->_indexingMessage($log, '... ' . __('plugins.generic.lucene.rebuildIndex.pullResult', array('numMarked' => $numMarked)) . PHP_EOL, $messages);
@@ -1058,11 +1058,11 @@ class LucenePlugin extends GenericPlugin {
 	 */
 	function _spamCheck() {
 		// Avoid spam.
-		$lastEmailTimstamp = (integer)$this->getSetting(0, 'lastEmailTimestamp');
+		$lastEmailTimstamp = (integer)$this->getSetting(CONTEXT_SITE, 'lastEmailTimestamp');
 		$threeHours = 60 * 60 * 3;
 		$now = time();
 		if ($now - $lastEmailTimstamp < $threeHours) return false;
-		$this->updateSetting(0, 'lastEmailTimestamp', $now);
+		$this->updateSetting(CONTEXT_SITE, 'lastEmailTimestamp', $now);
 		return true;
 	}
 
@@ -1124,10 +1124,10 @@ class LucenePlugin extends GenericPlugin {
 	 */
 	function _updateBoostFiles() {
 		// Make sure that we have an embedded server.
-		if ($this->getSetting(0, 'pullIndexing')) return;
+		if ($this->getSetting(CONTEXT_SITE, 'pullIndexing')) return;
 
 		// Make sure that the ranking/sorting-by-metric feature is enabled.
-		if (!($this->getSetting(0, 'rankingByMetric') || $this->getSetting(0, 'sortingByMetric'))) return;
+		if (!($this->getSetting(CONTEXT_SITE, 'rankingByMetric') || $this->getSetting(CONTEXT_SITE, 'sortingByMetric'))) return;
 
 		// Construct the file name.
 		$ds = DIRECTORY_SEPARATOR;

@@ -48,7 +48,7 @@ class LuceneHandler extends Handler {
 		// Check whether auto-suggest is enabled.
 		$suggestionList = array();
 		$lucenePlugin = $this->_getLucenePlugin();
-		$enabled = (bool)$lucenePlugin->getSetting(0, 'autosuggest');
+		$enabled = (bool)$lucenePlugin->getSetting(CONTEXT_SITE, 'autosuggest');
 		if ($enabled) {
 			// Retrieve search criteria from the user input.
 			$articleSearch = new ArticleSearch();
@@ -74,7 +74,7 @@ class LuceneHandler extends Handler {
 			$solrWebService = $lucenePlugin->getSolrWebService(); /* @var $solrWebService SolrWebService */
 			$suggestions = $solrWebService->getAutosuggestions(
 				$searchRequest, $autosuggestField, $userInput,
-				(int)$lucenePlugin->getSetting(0, 'autosuggestType')
+				(int)$lucenePlugin->getSetting(CONTEXT_SITE, 'autosuggestType')
 			);
 
 			// Prepare a suggestion list as understood by the
@@ -111,7 +111,7 @@ class LuceneHandler extends Handler {
 
 		// Die if pull indexing is disabled.
 		$lucenePlugin = $this->_getLucenePlugin();
-		if (!$lucenePlugin->getSetting(0, 'pullIndexing')) die(__('plugins.generic.lucene.message.pullIndexingDisabled'));
+		if (!$lucenePlugin->getSetting(CONTEXT_SITE, 'pullIndexing')) die(__('plugins.generic.lucene.message.pullIndexingDisabled'));
 
 		// Execute the pull indexing transaction.
 		$solrWebService = $lucenePlugin->getSolrWebService(); /* @var $solrWebService SolrWebService */
@@ -139,7 +139,7 @@ class LuceneHandler extends Handler {
 
 		// Only allow external report generation in the pull scenario.
 		$lucenePlugin = $this->_getLucenePlugin();
-		if (!$lucenePlugin->getSetting(0, 'pullIndexing')) return;
+		if (!$lucenePlugin->getSetting(CONTEXT_SITE, 'pullIndexing')) return;
 
 		// Generate (and output) the report.
 		if (!$lucenePlugin->generateBoostFile($filter));

@@ -67,7 +67,7 @@ class LuceneSettingsForm extends Form {
 	function initData() {
 		$plugin = $this->_plugin;
 		foreach ($this->_getFormFields() as $fieldName) {
-			$this->setData($fieldName, $plugin->getSetting(0, $fieldName));
+			$this->setData($fieldName, $plugin->getSetting(CONTEXT_SITE, $fieldName));
 		}
 		// We do not echo back the real password.
 		$this->setData('password', LUCENE_PLUGIN_PASSWORD_PLACEHOLDER);
@@ -86,7 +86,7 @@ class LuceneSettingsForm extends Form {
 		$password = $request->getUserVar('password');
 		if ($password === LUCENE_PLUGIN_PASSWORD_PLACEHOLDER) {
 			$plugin = $this->_plugin;
-			$password = $plugin->getSetting(0, 'password');
+			$password = $plugin->getSetting(CONTEXT_SITE, 'password');
 		}
 		$this->setData('password', $password);
 	}
@@ -95,26 +95,17 @@ class LuceneSettingsForm extends Form {
 	 * @see Form::fetch()
 	 */
 	function fetch($request, $template = null, $display = false) {
-		// Prepare auto-suggest.
 		$templateMgr = TemplateManager::getManager($request);
-		$templateMgr->assign('autosuggestTypes', $this->_getAutosuggestTypes());
-
-		// Prepare ranking-by-metric/sorting-by-metric.
-		$metricName = $this->_getDefaultMetric();
-		$templateMgr->assign('metricName', $metricName);
-		$templateMgr->assign('noMainMetric', empty($metricName));
-		$filesDir = Config::getVar('files', 'files_dir');
-		$filePath = $filesDir . DIRECTORY_SEPARATOR . 'lucene' . DIRECTORY_SEPARATOR . 'data';
-		$templateMgr->assign('canWriteBoostFile', is_writable($filePath));
-
-		// Prepare index rebuild.
-		$templateMgr->assign('journalsToReindex', $this->_getJournalsToReindex());
-
-		// Prepare solr server management.
-		$embeddedServer = $this->_embeddedServer;
-		$templateMgr->assign('serverIsAvailable', $embeddedServer->isAvailable());
-		$templateMgr->assign('serverIsRunning', $embeddedServer->isRunning());
-
+		$templateMgr->assign(array(
+			'pluginName' => $this->_plugin->getName(),
+			'autosuggestTypes' => $this->_getAutosuggestTypes(),
+			'metricName' => $metricName = $this->_getDefaultMetric(),
+			'noMainMetric', empty($metricName),
+			'serverIsAvailable' => $this->_embeddedServer->isAvailable(),
+			'serverIsRunning' => $this->_embeddedServer->isRunning(),
+			'journalsToReindex' => $this->_getJournalsToReindex(),
+			'canWriteBoostFile' => is_writable(Config::getVar('files', 'files_dir') . DIRECTORY_SEPARATOR . 'lucene' . DIRECTORY_SEPARATOR . 'data'),
+		));
 		return parent::fetch($request, $template, $display);
 	}
 
@@ -126,7 +117,7 @@ class LuceneSettingsForm extends Form {
 		$formFields = $this->_getFormFields();
 		$formFields[] = 'password';
 		foreach($formFields as $formField) {
-			$plugin->updateSetting(0, $formField, $this->getData($formField), 'string');
+			$plugin->updateSetting(CONTEXT_SITE, $formField, $this->getData($formField), 'string');
 		}
 	}
 

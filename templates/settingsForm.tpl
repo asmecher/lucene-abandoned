@@ -7,10 +7,6 @@
  *
  * Lucene plugin settings
  *}
-{strip}
-{assign var="pageTitle" value="plugins.generic.lucene.settings.luceneSettings"}
-{include file="common/header.tpl"}
-{/strip}
 <div id="luceneSettings">
 
 <script>
@@ -19,7 +15,7 @@
 		$('#luceneSettingsForm').pkpHandler('$.pkp.controllers.form.FormHandler');
 	{rdelim});
 </script>
-<form class="pkp_form" id="luceneSettingsForm" method="post" action="{plugin_url path="settings"}">
+<form class="pkp_form" id="luceneSettingsForm" method="post" action="{url router=$smarty.const.ROUTE_COMPONENT op="manage" category="generic" plugin=$pluginName verb="settings" save=true}">
 		{csrf}
 		{include file="common/formErrors.tpl"}
 
@@ -133,13 +129,13 @@
 					<label for="faceting">{translate key="plugins.generic.lucene.settings.faceting"}</label><br/>
 					<p>
 						{translate key="plugins.generic.lucene.settings.facetingSelectCategory"}:<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryDiscipline" id="facetCategoryDiscipline" {if $facetCategoryDiscipline}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.discipline}<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategorySubject" id="facetCategorySubject" {if $facetCategorySubject}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.subject}<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryType" id="facetCategoryType" {if $facetCategoryType}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.type}<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryCoverage" id="facetCategoryCoverage" {if $facetCategoryCoverage}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.coverage}<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryJournalTitle" id="facetCategoryJournalTitle" {if $facetCategoryJournalTitle}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.journalTitle}<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryAuthors" id="facetCategoryAuthors" {if $facetCategoryAuthors}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.authors}<br/>
-						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryPublicationDate" id="facetCategoryPublicationDate" {if $facetCategoryPublicationDate}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.publicationDate}
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryDiscipline" id="facetCategoryDiscipline" {if $facetCategoryDiscipline}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.discipline"}<br/>
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategorySubject" id="facetCategorySubject" {if $facetCategorySubject}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.subject"}<br/>
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryType" id="facetCategoryType" {if $facetCategoryType}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.type"}<br/>
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryCoverage" id="facetCategoryCoverage" {if $facetCategoryCoverage}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.coverage"}<br/>
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryJournalTitle" id="facetCategoryJournalTitle" {if $facetCategoryJournalTitle}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.journalTitle"}<br/>
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryAuthors" id="facetCategoryAuthors" {if $facetCategoryAuthors}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.authors"}<br/>
+						<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryPublicationDate" id="facetCategoryPublicationDate" {if $facetCategoryPublicationDate}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.publicationDate"}
 					</p>
 				</td>
 			</tr>
@@ -281,6 +277,4 @@
 			</tr>
 		</table>
 	</form>
-
 </div>
-{include file="common/footer.tpl"}

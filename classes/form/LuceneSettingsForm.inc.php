@@ -115,7 +115,7 @@ class LuceneSettingsForm extends Form {
 		$templateMgr->assign('serverIsAvailable', $embeddedServer->isAvailable());
 		$templateMgr->assign('serverIsRunning', $embeddedServer->isRunning());
 
-		parent::fetch($request, $template, $display);
+		return parent::fetch($request, $template, $display);
 	}
 
 	/**

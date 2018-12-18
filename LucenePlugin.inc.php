@@ -204,18 +204,34 @@ class LucenePlugin extends GenericPlugin {
 	//
 	// Implement template methods from GenericPlugin.
 	//
+	/**
+	 * @copydoc Plugin::getActions()
+	 */
+	function getActions($request, $actionArgs) {
+		$router = $request->getRouter();
+		import('lib.pkp.classes.linkAction.request.AjaxModal');
+		return array_merge(
+			$this->getEnabled()?array(
+				new LinkAction(
+					'settings',
+					new AjaxModal(
+						$router->url($request, null, null, 'manage', null, array_merge($actionArgs, array('verb' => 'settings'))),
+						$this->getDisplayName()
+					),
+					__('manager.plugins.settings'),
+					null
+				),
+			):array(),
+			parent::getActions($request, $actionArgs)
+		);
+	}
+
  	/**
 	 * @copydoc Plugin::manage()
 	 */
 	function manage($args, $request) {
-		if (!parent::manage($args, $request)) return false;
-
-		switch (array_shift($args)) {
+		switch ($request->getUserVar('verb')) {
 			case 'settings':
-				// Prepare the template manager.
-				$templateMgr = TemplateManager::getManager($request);
-				$templateMgr->registerPlugin('function', 'plugin_url', array($this, 'smartyPluginUrl'));
-
 				// Instantiate an embedded server instance.
 				$this->import('classes.EmbeddedServer');
 				$embeddedServer = new EmbeddedServer();
@@ -229,13 +245,8 @@ class LucenePlugin extends GenericPlugin {
 					$form->readInputData();
 					if ($form->validate()) {
 						$form->execute();
-						$request->redirect(null, 'manager', 'plugins', 'generic');
-						return false;
-					} else {
-						$form->display($request);
+						return new JSONMessage(true);
 					}
-
-				// Handle administrative request.
 				} else {
 					// Re-init data. It should be visible to users
 					// that whatever data they may have entered into
@@ -287,18 +298,10 @@ class LucenePlugin extends GenericPlugin {
 					} elseif ($request->getUserVar('startServer')) {
 						$embeddedServer->start();
 					}
-
-					// Re-display the settings page after executing
-					// an administrative task.
-					$form->display($request);
 				}
-				return true;
-
-			default:
-				// Unknown management verb
-				assert(false);
-				return false;
+				return new JSONMessage(true, $form->fetch($request));
 		}
+		return parent::manage($args, $request);
 	}
 
 

@@ -770,7 +770,7 @@ class LucenePlugin extends GenericPlugin {
 		$smarty =& $params[1];
 		$output =& $params[2];
 		$smarty->assign($params[0]);
-		$output .= $smarty->fetch($this->getTemplateResource('filterInput.tpl'));
+		$output .= $smarty->fetch($this->getTemplatePath() . 'filterInput.tpl');
 		return false;
 	}
 

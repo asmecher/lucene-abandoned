@@ -19,15 +19,6 @@ import('lib.pkp.classes.core.JSONMessage');
 import('classes.search.ArticleSearch');
 
 class LuceneHandler extends Handler {
-
-	/**
-	 * Constructor
-	 * @param $request Request
-	 */
-	function __construct($request) {
-		parent::__construct();
-	}
-
 	/**
 	 * @copydoc PKPHandler::authorize()
 	 */

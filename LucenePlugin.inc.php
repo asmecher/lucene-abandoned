@@ -103,6 +103,8 @@ class LucenePlugin extends GenericPlugin {
 		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE')) return $success;
 
 		if ($success && $this->getEnabled($mainContextId)) {
+			$this->_registerTemplateResource();
+
 			// Register callbacks (application-level).
 			HookRegistry::register('PluginRegistry::loadCategory', array($this, 'callbackLoadCategory'));
 			HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
@@ -1155,6 +1157,13 @@ class LucenePlugin extends GenericPlugin {
 		// Make the solr server aware of the boost file.
 		$solr = $this->getSolrWebService();
 		$solr->reloadExternalFiles();
+	}
+
+	/**
+	 * @copydoc PKPPlugin::getTemplatePath
+	 */
+	function getTemplatePath($inCore = false) {
+		return $this->getTemplateResourceName() . ':templates/';
 	}
 }
 

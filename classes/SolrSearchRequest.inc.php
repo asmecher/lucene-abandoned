@@ -109,7 +109,7 @@ class SolrSearchRequest {
 	 * Get the journal to be queried.
 	 * @return Journal
 	 */
-	function &getJournal() {
+	function getJournal() {
 		return $this->_journal;
 	}
 
@@ -117,8 +117,8 @@ class SolrSearchRequest {
 	 * Set the journal to be queried
 	 * @param $journal Journal
 	 */
-	function setJournal(&$journal) {
-		$this->_journal =& $journal;
+	function setJournal($journal) {
+		$this->_journal = $journal;
 	}
 
 	/**

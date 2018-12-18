@@ -33,9 +33,9 @@ class LuceneSettingsForm extends Form {
 	 * Constructor
 	 * @param $plugin LucenePlugin
 	 */
-	function __construct(&$plugin, &$embeddedServer) {
-		$this->_plugin =& $plugin;
-		$this->_embeddedServer =& $embeddedServer;
+	function __construct($plugin, $embeddedServer) {
+		$this->_plugin = $plugin;
+		$this->_embeddedServer = $embeddedServer;
 		parent::__construct($plugin->getTemplateResource('settingsForm.tpl'));
 
 		// Server configuration.
@@ -65,7 +65,7 @@ class LuceneSettingsForm extends Form {
 	 * @see Form::initData()
 	 */
 	function initData() {
-		$plugin =& $this->_plugin;
+		$plugin = $this->_plugin;
 		foreach ($this->_getFormFields() as $fieldName) {
 			$this->setData($fieldName, $plugin->getSetting(0, $fieldName));
 		}
@@ -85,7 +85,7 @@ class LuceneSettingsForm extends Form {
 		// if we only got the placehlder from the form.
 		$password = $request->getUserVar('password');
 		if ($password === LUCENE_PLUGIN_PASSWORD_PLACEHOLDER) {
-			$plugin =& $this->_plugin;
+			$plugin = $this->_plugin;
 			$password = $plugin->getSetting(0, 'password');
 		}
 		$this->setData('password', $password);
@@ -122,7 +122,7 @@ class LuceneSettingsForm extends Form {
 	 * Execute the form.
 	 */
 	function execute() {
-		$plugin =& $this->_plugin;
+		$plugin = $this->_plugin;
 		$formFields = $this->_getFormFields();
 		$formFields[] = 'password';
 		foreach($formFields as $formField) {

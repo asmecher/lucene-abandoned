@@ -126,13 +126,13 @@ class SolrWebService extends XmlWebService {
 	 * @param $journalId int
 	 * @return Journal
 	 */
-	function &_getJournal($journalId) {
+	function _getJournal($journalId) {
 		if (isset($this->_journalCache[$journalId])) {
-			$journal =& $this->_journalCache[$journalId];
+			$journal = $this->_journalCache[$journalId];
 		} else {
 			$journalDao = DAORegistry::getDAO('JournalDAO'); /* @var $journalDao JournalDAO */
 			$journal = $journalDao->getById($journalId);
-			$this->_journalCache[$journalId] =& $journal;
+			$this->_journalCache[$journalId] = $journal;
 		}
 
 		return $journal;
@@ -144,7 +144,7 @@ class SolrWebService extends XmlWebService {
 	 * @param $journalId int
 	 * @return Issue
 	 */
-	function &_getIssue($issueId, $journalId) {
+	function _getIssue($issueId, $journalId) {
 		if (isset($this->_issueCache[$issueId])) {
 			$issue = $this->_issueCache[$issueId];
 		} else {
@@ -309,7 +309,7 @@ class SolrWebService extends XmlWebService {
 	 *  an alternative query string (if any) and the number of hits for this
 	 *  string. Null if an error occurred while querying the server.
 	 */
-	function retrieveResults(&$searchRequest, &$totalResults) {
+	function retrieveResults($searchRequest, &$totalResults) {
 		// Construct the main query.
 		$params = $this->_getSearchQueryParameters($searchRequest);
 
@@ -417,7 +417,7 @@ class SolrWebService extends XmlWebService {
 
 		// Run through all returned documents and read the ID fields.
 		$results = array();
-		$docs =& $response->query('/response/result/doc');
+		$docs = $response->query('/response/result/doc');
 		foreach ($docs as $doc) {
 			$currentDoc = array();
 			foreach ($doc->childNodes as $docField) {
@@ -462,7 +462,7 @@ class SolrWebService extends XmlWebService {
 		// Read alternative spelling suggestions (if any).
 		$spellingSuggestion = null;
 		if ($searchRequest->getSpellcheck()) {
-			$alternativeSpellingNodeList =& $response->query('/response/lst[@name="spellcheck"]/lst[@name="suggestions"]/str[@name="collation"]');
+			$alternativeSpellingNodeList = $response->query('/response/lst[@name="spellcheck"]/lst[@name="suggestions"]/str[@name="collation"]');
 			if ($alternativeSpellingNodeList->length == 1) {
 				$alternativeSpellingNode = $alternativeSpellingNodeList->item(0);
 				$spellingSuggestion = $alternativeSpellingNode->textContent;
@@ -476,7 +476,7 @@ class SolrWebService extends XmlWebService {
 		$highligthedArticles = null;
 		if ($searchRequest->getHighlighting()) {
 			$highligthedArticles = array();
-			$highlightingNodeList =& $response->query('/response/lst[@name="highlighting"]/lst');
+			$highlightingNodeList = $response->query('/response/lst[@name="highlighting"]/lst');
 			foreach($highlightingNodeList as $highlightingNode) { /* @var $highlightingNode DOMElement */
 				if ($highlightingNode->hasChildNodes()) {
 					$indexArticleId = $highlightingNode->attributes->getNamedItem('name')->nodeValue;
@@ -496,7 +496,7 @@ class SolrWebService extends XmlWebService {
 			$facets = array();
 
 			// Read field-based facets.
-			$facetsNodeList =& $response->query('/response/lst[@name="facet_counts"]/lst[@name="facet_fields"]/lst');
+			$facetsNodeList = $response->query('/response/lst[@name="facet_counts"]/lst[@name="facet_fields"]/lst');
 			foreach($facetsNodeList as $facetFieldNode) { /* @var $facetFieldNode DOMElement */
 				$facetField = $facetFieldNode->attributes->getNamedItem('name')->nodeValue;
 				$facetFieldParts = explode('_', $facetField);
@@ -514,7 +514,7 @@ class SolrWebService extends XmlWebService {
 			}
 
 			// Read range-based facets.
-			$facetsNodeList =& $response->query('/response/lst[@name="facet_counts"]/lst[@name="facet_ranges"]/lst');
+			$facetsNodeList = $response->query('/response/lst[@name="facet_counts"]/lst[@name="facet_ranges"]/lst');
 			foreach($facetsNodeList as $facetFieldNode) { /* @var $facetFieldNode DOMElement */
 				$facetField = $facetFieldNode->attributes->getNamedItem('name')->nodeValue;
 				$facetFieldParts = explode('_', $facetField);
@@ -618,7 +618,7 @@ class SolrWebService extends XmlWebService {
 		// in case they won't return anything interesting.
 		$nodeList = $response->query('/response/result[@name="response"]/@numFound');
 		if ($nodeList->length != 1) return array();
-		$numFound =& $nodeList->item(0)->textContent;
+		$numFound = $nodeList->item(0)->textContent;
 		if ($numFound = 0) return array();
 
 		// Retrieve interesting terms from the response.
@@ -977,7 +977,7 @@ class SolrWebService extends XmlWebService {
 	 * @return DOMXPath An XPath object with the response loaded. Null if an error occurred.
 	 *  See _serviceMessage for more details about the error.
 	 */
-	function &_makeRequest($url, $params = array(), $method = 'GET') {
+	function _makeRequest($url, $params = array(), $method = 'GET') {
 		$webServiceRequest = new WebServiceRequest($url, $params, $method, $this->_useProxySettings);
 		if ($method == 'POST') {
 			$webServiceRequest->setHeader('Content-Type', 'text/xml; charset=utf-8');
@@ -1182,13 +1182,13 @@ class SolrWebService extends XmlWebService {
 		import('lib.pkp.classes.db.DBResultRange');
 		$range = new DBResultRange($batchSize);
 		$articleDao = DAORegistry::getDAO('ArticleDAO'); /* @var $articleDao ArticleDAO */
-		$changedArticlesIterator =& $articleDao->getBySetting(
+		$changedArticlesIterator = $articleDao->getBySetting(
 			'indexingState', SOLR_INDEXINGSTATE_DIRTY, $journalId, $range
 		);
 		unset($range);
 
 		// Retrieve articles and overall count from the result set.
-		$changedArticles =& $changedArticlesIterator->toArray();
+		$changedArticles = $changedArticlesIterator->toArray();
 		$batchCount = count($changedArticles);
 		$totalCount = $changedArticlesIterator->getCount();
 		unset($changedArticlesIterator);
@@ -1199,7 +1199,7 @@ class SolrWebService extends XmlWebService {
 
 		// Let the specific indexing implementation (pull or push)
 		// transfer the generated XML.
-		$numProcessed = call_user_func_array($sendXmlCallback, array(&$articleXml, $batchCount, $numDeleted));
+		$numProcessed = call_user_func_array($sendXmlCallback, array($articleXml, $batchCount, $numDeleted));
 
 		// Check error conditions.
 		if (!is_numeric($numProcessed)) return null;
@@ -1244,7 +1244,7 @@ class SolrWebService extends XmlWebService {
 	 *  After an error the method SolrWebService::getServiceMessage()
 	 *  will return details of the error.
 	 */
-	function _pushIndexingCallback(&$articleXml, $batchCount, $numDeleted) {
+	function _pushIndexingCallback($articleXml, $batchCount, $numDeleted) {
 		if ($batchCount > 0) {
 			// Make a POST request with all articles in this batch.
 			$url = $this->_getDihUrl() . '?command=full-import&clean=false';
@@ -1273,13 +1273,13 @@ class SolrWebService extends XmlWebService {
 	 * @return string The XML ready to be consumed by the Solr data
 	 *  import service.
 	 */
-	function _getArticleListXml(&$articles, $totalCount, &$numDeleted) {
+	function _getArticleListXml($articles, $totalCount, &$numDeleted) {
 		// Create the DOM document.
-		$articleDoc =& XMLCustomWriter::createDocument();
+		$articleDoc = XMLCustomWriter::createDocument();
 		assert(is_a($articleDoc, 'DOMDocument'));
 
 		// Create the root node.
-		$articleList =& XMLCustomWriter::createElement($articleDoc, 'articleList');
+		$articleList = XMLCustomWriter::createElement($articleDoc, 'articleList');
 		XMLCustomWriter::appendChild($articleDoc, $articleList);
 
 		// Run through all articles in the batch and generate an
@@ -1289,11 +1289,9 @@ class SolrWebService extends XmlWebService {
 		foreach($articles as $article) {
 			if (!is_a($article, 'PublishedArticle')) {
 				// Try to upgrade the article to a published article.
-				$publishedArticle =& $publishedArticleDao->getByArticleId($article->getId());
+				$publishedArticle = $publishedArticleDao->getByArticleId($article->getId());
 				if (is_a($publishedArticle, 'PublishedArticle')) {
-					unset($article);
-					$article =& $publishedArticle;
-					unset($publishedArticle);
+					$article = $publishedArticle;
 				}
 			}
 			$journal = $this->_getJournal($article->getJournalId());
@@ -1330,15 +1328,15 @@ class SolrWebService extends XmlWebService {
 	 * @param $markToDelete boolean If true the returned XML
 	 *  will only contain a deletion marker.
 	 */
-	function _addArticleXml(&$articleDoc, &$article, &$journal, $markToDelete = false) {
+	function _addArticleXml($articleDoc, $article, $journal, $markToDelete = false) {
 		assert(is_a($article, 'Article'));
 
 		// Get the root node of the list.
 		assert(is_a($articleDoc, 'DOMDocument'));
-		$articleList =& $articleDoc->documentElement;
+		$articleList = $articleDoc->documentElement;
 
 		// Create a new article node.
-		$articleNode =& XMLCustomWriter::createElement($articleDoc, 'article');
+		$articleNode = XMLCustomWriter::createElement($articleDoc, 'article');
 
 		// Add ID information.
 		XMLCustomWriter::setAttribute($articleNode, 'id', $article->getId());
@@ -1358,7 +1356,7 @@ class SolrWebService extends XmlWebService {
 		// Add authors.
 		$authors = $article->getAuthors();
 		if (!empty($authors)) {
-			$authorList =& XMLCustomWriter::createElement($articleDoc, 'authorList');
+			$authorList = XMLCustomWriter::createElement($articleDoc, 'authorList');
 			foreach ($authors as $author) { /* @var $author Author */
 				XMLCustomWriter::createChildWithText($articleDoc, $authorList, 'author', $author->getFullName(true));
 			}
@@ -1374,7 +1372,7 @@ class SolrWebService extends XmlWebService {
 		assert(!empty($supportedLocales));
 
 		// Add titles.
-		$titleList =& XMLCustomWriter::createElement($articleDoc, 'titleList');
+		$titleList = XMLCustomWriter::createElement($articleDoc, 'titleList');
 		// Titles are used for sorting, we therefore need
 		// them in all supported locales.
 		assert(!empty($supportedLocales));
@@ -1382,7 +1380,7 @@ class SolrWebService extends XmlWebService {
 			$localizedTitle = $article->getLocalizedTitle($locale);
 			if (!is_null($localizedTitle)) {
 				// Add the localized title.
-				$titleNode =& XMLCustomWriter::createChildWithText($articleDoc, $titleList, 'title', $localizedTitle);
+				$titleNode = XMLCustomWriter::createChildWithText($articleDoc, $titleList, 'title', $localizedTitle);
 				XMLCustomWriter::setAttribute($titleNode, 'locale', $locale);
 
 				// If the title does not exist in the given locale
@@ -1397,9 +1395,9 @@ class SolrWebService extends XmlWebService {
 		// Add abstracts.
 		$abstracts = $article->getAbstract(null); // return all locales
 		if (!empty($abstracts)) {
-			$abstractList =& XMLCustomWriter::createElement($articleDoc, 'abstractList');
+			$abstractList = XMLCustomWriter::createElement($articleDoc, 'abstractList');
 			foreach ($abstracts as $locale => $abstract) {
-				$abstractNode =& XMLCustomWriter::createChildWithText($articleDoc, $abstractList, 'abstract', $abstract);
+				$abstractNode = XMLCustomWriter::createChildWithText($articleDoc, $abstractList, 'abstract', $abstract);
 				XMLCustomWriter::setAttribute($abstractNode, 'locale', $locale);
 			}
 			XMLCustomWriter::appendChild($articleNode, $abstractList);
@@ -1408,9 +1406,9 @@ class SolrWebService extends XmlWebService {
 		// Add discipline.
 		$disciplines = $article->getDiscipline(null); // return all locales
 		if (!empty($disciplines)) {
-			$disciplineList =& XMLCustomWriter::createElement($articleDoc, 'disciplineList');
+			$disciplineList = XMLCustomWriter::createElement($articleDoc, 'disciplineList');
 			foreach ($disciplines as $locale => $discipline) {
-				$disciplineNode =& XMLCustomWriter::createChildWithText($articleDoc, $disciplineList, 'discipline', $discipline);
+				$disciplineNode = XMLCustomWriter::createChildWithText($articleDoc, $disciplineList, 'discipline', $discipline);
 				XMLCustomWriter::setAttribute($disciplineNode, 'locale', $locale);
 			}
 			XMLCustomWriter::appendChild($articleNode, $disciplineList);
@@ -1419,7 +1417,7 @@ class SolrWebService extends XmlWebService {
 		// Add subjects and subject classes.
 		$subjects = $article->getSubject(null);
 		if (!empty($subjects)) {
-			$subjectList =& XMLCustomWriter::createElement($articleDoc, 'subjectList');
+			$subjectList = XMLCustomWriter::createElement($articleDoc, 'subjectList');
 			if (!is_array($subjects)) $subjects = array();
 			$locales = array_keys($subjects);
 			foreach($locales as $locale) {
@@ -1428,7 +1426,7 @@ class SolrWebService extends XmlWebService {
 					if (!empty($subject)) $subject .= ' ';
 					$subject .= $subjects[$locale];
 				}
-				$subjectNode =& XMLCustomWriter::createChildWithText($articleDoc, $subjectList, 'subject', $subject);
+				$subjectNode = XMLCustomWriter::createChildWithText($articleDoc, $subjectList, 'subject', $subject);
 				XMLCustomWriter::setAttribute($subjectNode, 'locale', $locale);
 			}
 			XMLCustomWriter::appendChild($articleNode, $subjectList);
@@ -1437,9 +1435,9 @@ class SolrWebService extends XmlWebService {
 		// Add type.
 		$types = $article->getType(null); // return all locales
 		if (!empty($types)) {
-			$typeList =& XMLCustomWriter::createElement($articleDoc, 'typeList');
+			$typeList = XMLCustomWriter::createElement($articleDoc, 'typeList');
 			foreach ($types as $locale => $type) {
-				$typeNode =& XMLCustomWriter::createChildWithText($articleDoc, $typeList, 'type', $type);
+				$typeNode = XMLCustomWriter::createChildWithText($articleDoc, $typeList, 'type', $type);
 				XMLCustomWriter::setAttribute($typeNode, 'locale', $locale);
 			}
 			XMLCustomWriter::appendChild($articleNode, $typeList);
@@ -1448,9 +1446,9 @@ class SolrWebService extends XmlWebService {
 		// Add coverage.
 		$coverage = (array) $article->getCoverage(null);
 		if (!empty($coverage)) {
-			$coverageList =& XMLCustomWriter::createElement($articleDoc, 'coverageList');
+			$coverageList = XMLCustomWriter::createElement($articleDoc, 'coverageList');
 			foreach($coverage as $locale => $coverageLocalized) {
-				$coverageNode =& XMLCustomWriter::createChildWithText($articleDoc, $coverageList, 'coverage', $coverageLocalized);
+				$coverageNode = XMLCustomWriter::createChildWithText($articleDoc, $coverageList, 'coverage', $coverageLocalized);
 				XMLCustomWriter::setAttribute($coverageNode, 'locale', $locale);
 				unset($coverageNode);
 			}
@@ -1458,7 +1456,7 @@ class SolrWebService extends XmlWebService {
 		}
 
 		// Add journal titles.
-		$journalTitleList =& XMLCustomWriter::createElement($articleDoc, 'journalTitleList');
+		$journalTitleList = XMLCustomWriter::createElement($articleDoc, 'journalTitleList');
 		// Journal titles are used for sorting, we therefore need
 		// them in all supported locales.
 		foreach($supportedLocales as $locale) {
@@ -1473,7 +1471,7 @@ class SolrWebService extends XmlWebService {
 				$journalTitle = $localizedTitle;
 			}
 
-			$journalTitleNode =& XMLCustomWriter::createChildWithText($articleDoc, $journalTitleList, 'journalTitle', $journalTitle);
+			$journalTitleNode = XMLCustomWriter::createChildWithText($articleDoc, $journalTitleList, 'journalTitle', $journalTitle);
 			XMLCustomWriter::setAttribute($journalTitleNode, 'locale', $locale);
 			$sortOnly = $sortOnly ? 'true' : 'false';
 			XMLCustomWriter::setAttribute($journalTitleNode, 'sortOnly', $sortOnly);
@@ -1485,7 +1483,7 @@ class SolrWebService extends XmlWebService {
 		if (!empty($publicationDate)) {
 			// Transform and store article publication date.
 			$publicationDate = $this->_convertDate($publicationDate);
-			$dateNode =& XMLCustomWriter::createChildWithText($articleDoc, $articleNode, 'publicationDate', $publicationDate);
+			$dateNode = XMLCustomWriter::createChildWithText($articleDoc, $articleNode, 'publicationDate', $publicationDate);
 		}
 
 		$issueId = $article->getIssueId();
@@ -1497,7 +1495,7 @@ class SolrWebService extends XmlWebService {
 				if (!empty($issuePublicationDate)) {
 					// Transform and store issue publication date.
 					$issuePublicationDate = $this->_convertDate($issuePublicationDate);
-					$dateNode =& XMLCustomWriter::createChildWithText($articleDoc, $articleNode, 'issuePublicationDate', $issuePublicationDate);
+					$dateNode = XMLCustomWriter::createChildWithText($articleDoc, $articleNode, 'issuePublicationDate', $issuePublicationDate);
 				}
 			}
 		}
@@ -1514,9 +1512,9 @@ class SolrWebService extends XmlWebService {
 			$galleyUrl = $router->url($request, $journal->getPath(), 'article', 'download', array(intval($article->getId()), intval($galley->getId())));
 			if (!empty($locale) && !empty($galleyUrl)) {
 				if (is_null($galleyList)) {
-					$galleyList =& XMLCustomWriter::createElement($articleDoc, 'galleyList');
+					$galleyList = XMLCustomWriter::createElement($articleDoc, 'galleyList');
 				}
-				$galleyNode =& XMLCustomWriter::createElement($articleDoc, 'galley');
+				$galleyNode = XMLCustomWriter::createElement($articleDoc, 'galley');
 				XMLCustomWriter::setAttribute($galleyNode, 'locale', $locale);
 				XMLCustomWriter::setAttribute($galleyNode, 'fileName', $galleyUrl);
 				XMLCustomWriter::appendChild($galleyList, $galleyNode);
@@ -1530,7 +1528,7 @@ class SolrWebService extends XmlWebService {
 			} else {
 				$galleyXml = $galleyList->toXml();
 			}
-			$galleyOuterNode =& XMLCustomWriter::createElement($articleDoc, 'galley-xml');
+			$galleyOuterNode = XMLCustomWriter::createElement($articleDoc, 'galley-xml');
 			if (is_callable(array($articleDoc, 'createCDATASection'))) {
 				$cdataNode = $articleDoc->createCDATASection($galleyXml);
 			} else {
@@ -1737,7 +1735,7 @@ class SolrWebService extends XmlWebService {
 	 * @return array|null A parameter array or null if something
 	 *  went wrong.
 	 */
-	function _getSearchQueryParameters(&$searchRequest) {
+	function _getSearchQueryParameters($searchRequest) {
 		// Pre-filter and translate query phrases.
 		$subQueries = array();
 		foreach($searchRequest->getQuery() as $fieldList => $searchPhrase) {
@@ -1948,7 +1946,7 @@ class SolrWebService extends XmlWebService {
 	 * @param $article Article
 	 * @return boolean True if authorized, otherwise false.
 	 */
-	function _isArticleAccessAuthorized(&$article) {
+	function _isArticleAccessAuthorized($article) {
 		// Did we get a published article?
 		if (!is_a($article, 'PublishedArticle')) return false;
 

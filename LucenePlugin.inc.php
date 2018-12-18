@@ -50,7 +50,7 @@ class LucenePlugin extends GenericPlugin {
 	 * Get the solr web service.
 	 * @return SolrWebService
 	 */
-	function &getSolrWebService() {
+	function getSolrWebService() {
 		return $this->_solrWebService;
 	}
 
@@ -72,8 +72,8 @@ class LucenePlugin extends GenericPlugin {
 	 * @param $emailKey string
 	 * @param $mailTemplate MailTemplate
 	 */
-	function setMailTemplate($emailKey, &$mailTemplate) {
-		$this->_mailTemplates[$emailKey] =& $mailTemplate;
+	function setMailTemplate($emailKey, $mailTemplate) {
+		$this->_mailTemplates[$emailKey] = $mailTemplate;
 	}
 
 	/**
@@ -82,11 +82,11 @@ class LucenePlugin extends GenericPlugin {
 	 * @param $emailKey string
 	 * @param $journal Journal
 	 */
-	function &getMailTemplate($emailKey, $journal = null) {
+	function getMailTemplate($emailKey, $journal = null) {
 		if (!isset($this->_mailTemplates[$emailKey])) {
 			import('lib.pkp.classes.mail.MailTemplate');
 			$mailTemplate = new MailTemplate($emailKey, null, $journal, true, true);
-			$this->_mailTemplates[$emailKey] =& $mailTemplate;
+			$this->_mailTemplates[$emailKey] = $mailTemplate;
 		}
 		return $this->_mailTemplates[$emailKey];
 	}
@@ -326,7 +326,7 @@ class LucenePlugin extends GenericPlugin {
 		$plugins =& $args[1];
 		$seq = $luceneFacetsBlockPlugin->getSeq();
 		if (!isset($plugins[$seq])) $plugins[$seq] = array();
-		$plugins[$seq][$luceneFacetsBlockPlugin->getPluginPath()] =& $luceneFacetsBlockPlugin;
+		$plugins[$seq][$luceneFacetsBlockPlugin->getPluginPath()] = $luceneFacetsBlockPlugin;
 
 		return false;
 	}
@@ -474,7 +474,7 @@ class LucenePlugin extends GenericPlugin {
 		}
 
 		// Call the solr web service.
-		$solrWebService =& $this->getSolrWebService();
+		$solrWebService = $this->getSolrWebService();
 		$result = $solrWebService->retrieveResults($searchRequest, $totalResults);
 		if (is_null($result)) {
 			$error = $solrWebService->getServiceMessage();
@@ -594,7 +594,7 @@ class LucenePlugin extends GenericPlugin {
 		// for online index updates to limit the time a request may be
 		// locked in case a race condition with a large index update
 		// occurs.
-		$solrWebService =& $this->getSolrWebService();
+		$solrWebService = $this->getSolrWebService();
 		$result = $solrWebService->pushChangedArticles(5);
 		if (is_null($result)) {
 			$this->_informTechAdmin($solrWebService->getServiceMessage());
@@ -677,7 +677,7 @@ class LucenePlugin extends GenericPlugin {
 
 		// Read the section's ranking boost.
 		$rankingBoost = LUCENE_PLUGIN_DEFAULT_RANKING_BOOST;
-		$section =& $form->section;
+		$section = $form->section;
 		if (is_a($section, 'Section')) {
 			$rankingBoostSetting = $section->getData('rankingBoost');
 			if (is_numeric($rankingBoostSetting)) $rankingBoost = (float)$rankingBoostSetting;
@@ -1077,15 +1077,15 @@ class LucenePlugin extends GenericPlugin {
 
 		// Is this a search or an indexing problem?
 		if ($isSearchProblem) {
-			$mail =& $this->getMailTemplate('LUCENE_SEARCH_SERVICE_ERROR_NOTIFICATION', $journal);
+			$mail = $this->getMailTemplate('LUCENE_SEARCH_SERVICE_ERROR_NOTIFICATION', $journal);
 		} else {
 			// Check whether this is journal or article index update problem.
 			if (is_a($journal, 'Journal')) {
 				// This must be a journal indexing problem.
-				$mail =& $this->getMailTemplate('LUCENE_JOURNAL_INDEXING_ERROR_NOTIFICATION', $journal);
+				$mail = $this->getMailTemplate('LUCENE_JOURNAL_INDEXING_ERROR_NOTIFICATION', $journal);
 			} else {
 				// Instantiate an article mail template.
-				$mail =& $this->getMailTemplate('LUCENE_ARTICLE_INDEXING_ERROR_NOTIFICATION');
+				$mail = $this->getMailTemplate('LUCENE_ARTICLE_INDEXING_ERROR_NOTIFICATION');
 			}
 		}
 

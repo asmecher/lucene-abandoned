@@ -19,183 +19,63 @@
 	{csrf}
 	{include file="common/formErrors.tpl"}
 
-	<h3>{translate key="plugins.generic.lucene.settings.solrServerSettings"}</h3>
+	{fbvFormArea id="luceneSettingsFormArea" title="plugins.generic.lucene.settings.solrServerSettings"}
+		<div id="description"><p>{translate key="plugins.generic.lucene.settings.description"}</p></div>
+		{fbvElement type="text" id="searchEndpoint" value=$searchEndpoint label="plugins.generic.lucene.settings.searchEndpoint" required=true}
+		<span class="instruct">{translate key="plugins.generic.lucene.settings.searchEndpointInstructions"}</span>
+		{fbvElement type="text" id="username" value=$username label="plugins.generic.lucene.settings.username" required=true}
+		<span class="instruct">{translate key="plugins.generic.lucene.settings.usernameInstructions"}</span>
+		{fbvElement type="password" id="password" value=$password label="plugins.generic.lucene.settings.password" required=true}
+		<span class="instruct">{translate key="plugins.generic.lucene.settings.passwordInstructions"}</span>
+		{fbvElement type="text" id="instId" value=$instId label="plugins.generic.lucene.settings.instId" required=true}
+		<span class="instruct">{translate key="plugins.generic.lucene.settings.instIdInstructions"}</span>
+		{fbvFormSection list=true}
+			{fbvElement type="checkbox" id="useProxySettings" value="1" checked=$useProxySettings label="plugins.generic.lucene.settings.useProxySettings"}
+		{/fbvFormSection}
+		<span class="instruct">{translate key="plugins.generic.lucene.settings.useProxySettingsInstructions"}</span>
+	{/fbvFormArea}
 
-	<div id="description"><p>{translate key="plugins.generic.lucene.settings.description"}</p></div>
-	<div class="separator"></div>
-	<br />
-
-	<table class="data">
-		<tr>
-			<td class="label">{fieldLabel name="searchEndpoint" required="true" key="plugins.generic.lucene.settings.searchEndpoint"}</td>
-			<td class="value"><input type="text" name="searchEndpoint" id="searchEndpoint" value="{$searchEndpoint|escape}" size="45" maxlength="255" class="textField" />
-				<br />
-				<span class="instruct">{translate key="plugins.generic.lucene.settings.searchEndpointInstructions"}</span>
-			</td>
-		</tr>
-		<tr>
-			<td class="label">{fieldLabel name="username" required="true" key="plugins.generic.lucene.settings.username"}</td>
-			<td class="value"><input type="text" name="username" id="username" value="{$username|escape}" size="15" maxlength="25" class="textField" />
-				<br />
-				<span class="instruct">{translate key="plugins.generic.lucene.settings.usernameInstructions"}</span>
-			</td>
-		</tr>
-		<tr>
-			<td class="label">{fieldLabel name="password" required="true" key="plugins.generic.lucene.settings.password"}</td>
-			<td class="value"><input type="password" name="password" id="password" value="{$password|escape}" size="15" maxlength="25" class="textField" />
-				<br />
-				<span class="instruct">{translate key="plugins.generic.lucene.settings.passwordInstructions"}</span>
-			</td>
-		</tr>
-		<tr>
-			<td class="label">{fieldLabel name="instId" required="true" key="plugins.generic.lucene.settings.instId"}</td>
-			<td class="value"><input type="text" name="instId" id="instId" value="{$instId|escape}" size="15" maxlength="25" class="textField" />
-				<br />
-				<span class="instruct">{translate key="plugins.generic.lucene.settings.instIdInstructions"}</span>
-			</td>
-		</tr>
-		<tr valign="top">
-			<td class="label">{fieldLabel name="useProxySettings" key="plugins.generic.lucene.settings.useProxySettings"}</td>
-			<td class="value"><input type="checkbox" name="useProxySettings" id="useProxySettings" {if $useProxySettings}checked="checked" {/if}/>
-				<label for="useProxySettings">{translate key="plugins.generic.lucene.settings.useProxySettingsInstructions"}</label>
-			</td>
-		</tr>
-	</table>
-
-	<br />
-
-	<h3>{translate key="plugins.generic.lucene.settings.searchFeatures"}</h3>
-
-	<div id="featureDescription"><p>{translate key="plugins.generic.lucene.settings.featureDescription"}</p></div>
-	<div class="separator"></div>
-	<br />
-
-	<table class="data">
-		<tr>
-			<td width="5%" class="label" align="right"><input type="checkbox" name="autosuggest" id="autosuggest" {if $autosuggest}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="autosuggest">{translate key="plugins.generic.lucene.settings.autosuggest"}</label><br/>
-				<br/>
-				<select name="autosuggestType" id="autosuggestType" class="selectMenu">
-					{html_options options=$autosuggestTypes selected=$autosuggestType}
-				</select>
-				<p class="instruct">{translate key="plugins.generic.lucene.settings.autosuggestTypeExplanation"}</p>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input type="checkbox" name="highlighting" id="highlighting" {if $highlighting}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="highlighting">{translate key="plugins.generic.lucene.settings.highlighting"}</label>
-			</td>
-		</tr>
-		<tr>
-			<script>{literal}
-				$(function() {
-					var $facetingCheckbox = $('#faceting');
-					var facetCategoryClass = '.plugins_generic_lucene_facetCategory';
-
-					/**
-					 * Toggling the faceting checkbox will (de-)select
-					 * all facet categories.
-					 */
-					function toggleFaceting() {
-						$(facetCategoryClass).each(function(index) {
-							$(this).attr('checked', $facetingCheckbox.attr('checked'));
-						});
-					}
-					$facetingCheckbox.click(toggleFaceting);
-
-					/**
-					 * Toggling a facet category checkbox will update
-					 * the state fo the faceting checkbox: One or more
-					 * selected facet categories will enable faceting.
-					 * Faceting will be disabled when no category is
-					 * being selected.
-					 */
-					function checkFacetingState() {
-						var facetingEnabled = false;
-						$(facetCategoryClass).each(function(index) {
-							if (this.checked) facetingEnabled = true;
-						});
-						var facetingChecked = (facetingEnabled ? 'checked' : '');
-						$facetingCheckbox.attr('checked', facetingChecked);
-					 }
-					 $(facetCategoryClass).click(checkFacetingState);
-					 checkFacetingState();
-				});
-			{/literal}</script>
-			<td class="label" align="right"><input type="checkbox" name="faceting" id="faceting" /></td>
-			<td class="value">
-				<label for="faceting">{translate key="plugins.generic.lucene.settings.faceting"}</label><br/>
-				<p>
-					{translate key="plugins.generic.lucene.settings.facetingSelectCategory"}:<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryDiscipline" id="facetCategoryDiscipline" {if $facetCategoryDiscipline}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.discipline"}<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategorySubject" id="facetCategorySubject" {if $facetCategorySubject}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.subject"}<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryType" id="facetCategoryType" {if $facetCategoryType}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.type"}<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryCoverage" id="facetCategoryCoverage" {if $facetCategoryCoverage}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.coverage"}<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryJournalTitle" id="facetCategoryJournalTitle" {if $facetCategoryJournalTitle}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.journalTitle"}<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryAuthors" id="facetCategoryAuthors" {if $facetCategoryAuthors}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.authors"}<br/>
-					<input type="checkbox" class="plugins_generic_lucene_facetCategory" name="facetCategoryPublicationDate" id="facetCategoryPublicationDate" {if $facetCategoryPublicationDate}checked="checked" {/if}/>&nbsp;{translate key="plugins.generic.lucene.faceting.publicationDate"}
-				</p>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input type="checkbox" name="spellcheck" id="spellcheck" {if $spellcheck}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="spellcheck">{translate key="plugins.generic.lucene.settings.spellcheck"}</label>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input type="checkbox" name="simdocs" id="simdocs" {if $simdocs}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="simdocs">{translate key="plugins.generic.lucene.settings.simdocs"}</label>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input type="checkbox" name="customRanking" id="customRanking" {if $customRanking}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="customRanking">{translate key="plugins.generic.lucene.settings.customRanking"}</label>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input {if $noMainMetric}disabled="disabled" {/if}type="checkbox" name="rankingByMetric" id="rankingByMetric" {if $rankingByMetric}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="rankingByMetric">
-					{if $noMainMetric}
-						{translate key="plugins.generic.lucene.settings.rankingByMetricDisabled"}
-					{else}
-						{translate key="plugins.generic.lucene.settings.rankingByMetricEnabled" metricName=$metricName}
-					{/if}
-				</label>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input {if $noMainMetric}disabled="disabled" {/if}type="checkbox" name="sortingByMetric" id="sortingByMetric" {if $sortingByMetric}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="sortingByMetric">
-					{if $noMainMetric}
-						{translate key="plugins.generic.lucene.settings.sortingByMetricDisabled"}
-					{else}
-						{translate key="plugins.generic.lucene.settings.sortingByMetricEnabled" metricName=$metricName}
-					{/if}
-				</label>
-			</td>
-		</tr>
-		<tr valign="top">
-			<td class="label" align="right"><input type="checkbox" name="instantSearch" id="instantSearch" {if $instantSearch}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="instantSearch">{translate key="plugins.generic.lucene.settings.instantSearch"}</label>
-			</td>
-		</tr>
-		<tr>
-			<td class="label" align="right"><input type="checkbox" name="pullIndexing" id="pullIndexing" {if $pullIndexing}checked="checked" {/if}/></td>
-			<td class="value">
-				<label for="pullIndexing">{translate key="plugins.generic.lucene.settings.pullIndexing"}</label>
-			</td>
-		</tr>
-	</table>
-
-	<br/>
+	{fbvFormArea id="luceneSearchFeatures" title="plugins.generic.lucene.settings.searchFeatures"}
+		<div id="featureDescription"><p>{translate key="plugins.generic.lucene.settings.featureDescription"}</p></div>
+		{fbvElement type="select" required=true id="autosuggestType" selected=$autosuggestType from=$autosuggestTypes label="plugins.generic.lucene.settings.autosuggest" size=$fbvStyles.size.MEDIUM inline=true translate=false}
+		<p class="instruct">{translate key="plugins.generic.lucene.settings.autosuggestTypeExplanation"}</p>
+		{fbvFormSection list=true}
+			{fbvElement type="checkbox" id="highlighting" value="1" checked=$highlighting label="plugins.generic.lucene.settings.highlighting"}
+		{/fbvFormSection}
+		{fbvFormSection list=true}
+			{fbvElement type="checkbox" id="faceting" value="1" checked=$faceting label="plugins.generic.lucene.settings.faceting"}
+			{fbvElement type="checkbox" id="facetCategoryDiscipline" value="1" checked=$facetCategoryDiscipline label="plugins.generic.lucene.faceting.discipline"}
+			{fbvElement type="checkbox" id="facetCategorySubject" value="1" checked=$facetCategorySubject label="plugins.generic.lucene.faceting.subject"}
+			{fbvElement type="checkbox" id="facetCategoryType" value="1" checked=$facetCategoryType label="plugins.generic.lucene.faceting.type"}
+			{fbvElement type="checkbox" id="facetCategoryCoverage" value="1" checked=$facetCategoryCoverage label="plugins.generic.lucene.faceting.coverage"}
+			{fbvElement type="checkbox" id="facetCategoryJournalTitle" value="1" checked=$facetCategoryJournalTitle label="plugins.generic.lucene.faceting.journalTitle"}
+			{fbvElement type="checkbox" id="facetCategoryAuthors" value="1" checked=$facetCategoryAuthors label="plugins.generic.lucene.faceting.authors"}
+			{fbvElement type="checkbox" id="facetCategoryPublicationDate" value="1" checked=$facetCategoryPublicationDate label="plugins.generic.lucene.faceting.publicationDate"}
+		{/fbvFormSection}
+		{fbvFormSection list=true}
+			{fbvElement type="checkbox" id="spellcheck" value="1" checked=$spellcheck label="plugins.generic.lucene.settings.spellcheck"}
+			{fbvElement type="checkbox" id="simdocs" value="1" checked=$simdocs label="plugins.generic.lucene.settings.simdocs"}
+			{fbvElement type="checkbox" id="customRanking" value="1" checked=$customRanking label="plugins.generic.lucene.settings.customRanking"}
+			{capture assign="metricLabel"}
+				{if $noMainMetric}
+					{translate key="plugins.generic.lucene.settings.rankingByMetricDisabled"}
+				{else}
+					{translate key="plugins.generic.lucene.settings.rankingByMetricEnabled" metricName=$metricName}
+				{/if}
+			{/capture}
+			{fbvElement type="checkbox" id="rankingByMetric" value="1" checked=$rankingByMetric label=$metricLabel disabled=$noMainMetric translate=false}
+			{capture assign="metricLabel"}
+				{if $noMainMetric}
+					{translate key="plugins.generic.lucene.settings.sortingByMetricDisabled"}
+				{else}
+					{translate key="plugins.generic.lucene.settings.sortingByMetricEnabled" metricName=$metricName}
+				{/if}
+			{/capture}
+			{fbvElement type="checkbox" id="rankingByMetric" value="1" checked=$rankingByMetric label=$metricLabel disabled=$noMainMetric translate=false}
+			{fbvElement type="checkbox" id="instantSearch" value="1" checked=$instantSearch label="plugins.generic.lucene.settings.instantSearch"}
+			{fbvElement type="checkbox" id="pullIndexing" value="1" checked=$pullIndexing label="plugins.generic.lucene.settings.pullIndexing"}
+		{/fbvFormSection}
+	{/fbvFormArea}
 
 	{fbvFormButtons}
 	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>

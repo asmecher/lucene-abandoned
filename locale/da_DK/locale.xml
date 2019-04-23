@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
+
+<!--
+  * locale/da_DK/locale.xml
+  *
+  * Copyright (c) 2014-2019 Simon Fraser University
+  * Copyright (c) 2003-2019 John Willinsky
+  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+  *
+  * Localization strings.
+  -->
+
+<locale name="da_DK" full_name="Dansk">
+	<message key="plugins.generic.lucene.displayName">Lucene søge-plugin</message>
+	<message key="plugins.generic.lucene.description">Lucene-plugin’en understøtter flersproget søgning, forbedrer søgerelevansen, foretager hurtigere indeksering og giver bedre skalerbarhed mm.</message>
+	<message key="plugins.generic.lucene.faceting.title">forfin din søgning</message>
+	<message key="plugins.generic.lucene.faceting.discipline">Fagområde</message>
+	<message key="plugins.generic.lucene.faceting.subject">Nøgleord</message>
+	<message key="plugins.generic.lucene.faceting.type">Metode/Tilgang</message>
+	<message key="plugins.generic.lucene.faceting.coverage">Dækning</message>
+	<message key="plugins.generic.lucene.faceting.journalTitle">Tidsskrift</message>
+	<message key="plugins.generic.lucene.faceting.authors">Forfatter</message>
+	<message key="plugins.generic.lucene.faceting.publicationDate">Udgivelsesdato</message>
+	<message key="plugins.generic.lucene.message.coreNotFound">Den ønskede kerne '{$core}' blev ikke fundet på Solr-serveren. Er den online?</message>
+	<message key="plugins.generic.lucene.message.indexingIncomplete">Der opstod en fejl under indeksering: Færdigbehandlet {$numProcessed} ud af en mængde på {$batchCount} ({$numDeleted} slettede dokumenter i denne batch).</message>
+	<message key="plugins.generic.lucene.message.indexOnline">Indeks med {$numDocs} dokumenter online.</message>
+	<message key="plugins.generic.lucene.message.pullIndexingDisabled">Pull-indeksering er ikke aktiveret. Aktivér det i Lucene-plugin-indstillingerne.</message>
+	<message key="plugins.generic.lucene.message.searchServiceOffline">Beklageligvis er OJS-søgetjenesten i øjeblikket offline.</message>
+	<message key="plugins.generic.lucene.message.techAdminInformed">Den tekniske administrator af dette tidsskrift er blevet informeret om problemet.</message>
+	<message key="plugins.generic.lucene.message.webServiceError">Lucene-webtjenesten returnerede en fejl.</message>
+	<message key="plugins.generic.lucene.rebuildIndex.couldNotDeleteFieldCache">Kunne ikke slette ’field cache’. Udfør 'rm cache/fc-plugins-lucene-fieldCache.php' manuelt under behørig tilladelse.</message>
+	<message key="plugins.generic.lucene.rebuildIndex.pullResult">{$numMarked} artikler markeret til opdatering</message>
+	<message key="plugins.generic.lucene.rebuildIndex.rebuildDictionaries">Genopbygning af ordbøger</message>
+	<message key="plugins.generic.lucene.rebuildIndex.updateBoostFile">Opdatering af brugsstatistisk-data</message>
+	<message key="plugins.generic.lucene.results.didYouMean">Mente du</message>
+	<message key="plugins.generic.lucene.results.syntaxInstructions"><![CDATA[Søgetips: <ul>
+			<li>I søgetermerne skelnes der ikke mellem store og små bogstaver</li>
+			<li>Almene ord ignoreres</li>
+			<li>Som standard returneres artikler, der indeholder <em>ethvert</em> ord, der indgår i søgningen (dvs. <em>ELLER</em> er underforstået)</li>
+			<li>Sørg for at et specifikt ord findes i en artikel ved at sætte et <strong>+</strong> foran; fx + <em>tidsskrift + adgang videnskabelig akademisk</em></li>
+			<li>Kombinér flere ord med <em>OG</ em> for at finde artikler, der indeholder alle udtryk; fx <em>uddannelse og forskning</ em></li>
+			<li>Udeluk et ord ved at sætte et <strong>-</ strong> eller et <em>IKKE</ em> foran; fx <em>online -politik </ em> eller <em>online IKKE politik </ em></li>
+			<li>Søg efter en specifik sætning ved at sætte den i anførselstegn; fx <em>"open access publicering"</ em>. Tip: Når du anvender kinesiske eller japanske ord, kan du finde specifikke ordkombinationer i blandede sprogfelter, f.eks. "中国".</li>
+			<li>Brug parentes til at oprette mere komplekse forespørgsler; fx <em>arkiv ((tidsskrift OG konference) IKKE afhandlinger)</ em></li>
+		 </ul>]]></message>
+	<message key="plugins.generic.lucene.settings">Indstillinger</message>
+	<message key="plugins.generic.lucene.settings.autosuggest">'Foreslå automatisk' (Vis en dynamisk drop-down-menu med forslag til søgeord, mens du indtaster en søgeforespørgsel)</message>
+	<message key="plugins.generic.lucene.settings.autosuggestTypeExplanation"><![CDATA[<strong>Kontrollér om ord giver resultater</ strong>: Foreslå kun ord, der rent faktisk vil generere et søgeresultat. Forslag vil være
+		kryds-kontrolleret op imod det aktuelle tidsskrift og ord, der allerede er indtastet i andre søgefelter.<br />
+		<strong>Brug global ordbog</ strong>: Dette er hurtigere, bruger færre ressourcer på serveren og skaleres derfor bedre
+		I forbindelse med omfattende installationer. Forslag kan imidlertid indeholde irrelevante ord, f.eks. fra andre tidsskrifter eller søgeord, der ikke genererer
+		søgeresultater.]]></message>
+	<message key="plugins.generic.lucene.settings.autosuggestTypeFaceting">Tjek om ord findes i søgeresultat</message>
+	<message key="plugins.generic.lucene.settings.autosuggestTypeSuggester">Brug global ordbog</message>
+	<message key="plugins.generic.lucene.settings.customRanking">Brugerdefineret rangering (indstil individuelle rangerings-markeringer ud for hver tidsskriftssektion)</message>
+	<message key="plugins.generic.lucene.settings.description"><![CDATA[Lucene-plugin’en bruger Lucene-søgeindekset via en Solr-server. Denne konfigurationsside giver dig mulighed for at konfigurere adgang til Solr-serveren.
+		<strong>Sørg for at du læser plugin’ens README-fil (plugins/generic/lucene/README), før du forsøger at ændre standardkonfigurationen.</strong>
+		Hvis du bruger det integrerede scenarie bag en firewall som forklaret i README-filen, kan du formentlig efterlade alle konfigurationsparametre uændret.]]></message>
+	<message key="plugins.generic.lucene.settings.dictionaryRebuild">Genopbyg ordbøger</message>
+	<message key="plugins.generic.lucene.settings.faceting">Facettering (vis en navigationsboks med ekstra filtre til optimering af din søgning)</message>
+	<message key="plugins.generic.lucene.settings.facetingSelectCategory"><![CDATA[Du kan vælge bestemte facetkategorier (den tilsvarende metadata skal være tilvalgt under indeksering i tidsskriftsopsætning, trin 3.4). (I OJS 3 gælder det Indstillinger > Workflow > Manuskriptmetadata)]]></message>
+	<message key="plugins.generic.lucene.settings.featureDescription">Lucene-plugin'en indeholder flere valgfrie søgefunktioner. De fleste af disse funktioner er aktiveret som standard, men kan deaktiveres eller finjusteres.</message>
+	<message key="plugins.generic.lucene.settings.highlighting">Fremhævelse (vis et kort uddrag af hver artikels fulde tekst, der indeholder søgeordene)</message>
+	<message key="plugins.generic.lucene.settings.indexAdministration">Indeksadministration</message>
+	<message key="plugins.generic.lucene.settings.indexRebuild">Genopbyg indeks</message>
+	<message key="plugins.generic.lucene.settings.indexRebuild.confirm">Genopbygning af indekset og/eller ordbøgerne kan tage lang tid. Er du sikker på, at du vil fortsætte?</message>
+	<message key="plugins.generic.lucene.settings.indexRebuildAllJournals">Genopbyg indeks til alle tidsskrifter</message>
+	<message key="plugins.generic.lucene.settings.indexRebuildDescription">Hvis dit Lucene-indeks blev forældet eller ødelagt, kan du genindeksere dine data for hvert enkelt tidsskrift eller for samtlige tidsskrifter på denne installation. Ordbøger skal, når du bruger automatisk forslag eller alternative staveforslag, genopbygges efter store indeksopdateringer. (Se plugins/generic/lucene/README for detaljer og måder at automatisere disse processer på.)</message>
+	<message key="plugins.generic.lucene.settings.indexRebuildJournal">Genopbyg indeks til tidsskrift "{$journalName}"</message>
+	<message key="plugins.generic.lucene.settings.indexRebuildMessages">Output fra den sidste genopbygning af indeks:</message>
+	<message key="plugins.generic.lucene.settings.instantSearch">Lynsøgning (returnerer søgeresultater øjeblikkeligt, når en bruger skriver en søgeforespørgsel - OBS: bruger betydelige serverressourcer)</message>
+	<message key="plugins.generic.lucene.settings.instId">Unikt Installations-ID</message>
+	<message key="plugins.generic.lucene.settings.instIdRequired">Indtast et ID, der unikt identificerer denne OJS-installation i forhold til Solr-søgeserveren.</message>
+	<message key="plugins.generic.lucene.settings.instIdInstructions">Hvis du bruger en central søge-server, skal du sørge for, at der er et unikt installations-id for hver OJS-installation, der deler det samme søgeindeks. Dette kan være en vilkårlig tekst, men den skal være forskellig for hver involveret OJS-server (f.eks. serverens statiske IP-adresse, hvis du har en OJS-installation pr. server).</message>
+	<message key="plugins.generic.lucene.settings.internalError">Ugyldigt valg.</message>
+	<message key="plugins.generic.lucene.settings.luceneSettings">Lucene Plugin: Indstillinger</message>
+	<message key="plugins.generic.lucene.settings.password">Password</message>
+	<message key="plugins.generic.lucene.settings.passwordInstructions">Indtast password til Solr-serveren.</message>
+	<message key="plugins.generic.lucene.settings.passwordRequired">Indtast et gyldigt password for at få adgang til Solr-søgeserveren.</message>
+	<message key="plugins.generic.lucene.settings.pullIndexing">Pull-indeksering (dette er en avanceret funktion, se README-filen for mere information)</message>
+	<message key="plugins.generic.lucene.settings.rankingByMetricEnabled">Rangering efter brugsstatistik (dine '{$metricName}' statistiske data vil blive brugt til at påvirke rangordningen)</message>
+	<message key="plugins.generic.lucene.settings.rankingByMetricDisabled">Rangering efter brugsstatistik (aktivér mindst én statistik-/rapporterings-plugin og vælg en "main metric" i webstedets indstillinger for at aktivere denne mulighed)</message>
+	<message key="plugins.generic.lucene.settings.searchEndpoint">Søgepunkts-URL</message>
+	<message key="plugins.generic.lucene.settings.searchEndpointInstructions">Solr-søgepunktet består af serverens URL og en søgeagent (’handler’). Se standardindstillingen som et eksempel på dette. Du skal kun ændre dette, hvis du bruger en central søge-server.</message>
+	<message key="plugins.generic.lucene.settings.searchEndpointRequired">Indtast en gyldig URL, der repræsenterer det søgepunkt (Solr søge-server og søgeagent (handler)), du gerne vil oprette forbindelse til.</message>
+	<message key="plugins.generic.lucene.settings.searchFeatures">Søgefunktions-konfiguration</message>
+	<message key="plugins.generic.lucene.settings.serverNotAvailable"><![CDATA[Du kan ikke administrere Solr-serveren fra webgrænsefladen i øjeblikket.<br/>
+		<br/>
+		Mulige årsager kan være:	<ul>
+			<li>Du har muligvis ikke en integreret server installeret i dette OJS-tilfælde (se 'plugins/generic/lucene/README' for detaljer).</li>
+			<li>Installationen af din integrerede server kan være ufuldstændig. Kontrollér, at katalogerne 'plugins/generic/lucene/lib/solr' og 'plugins/generic/lucene/ ib/jetty' faktisk indeholder (eller peger på) installationsfilerne til solr/pier.</li>
+			<li>Følgende serveradministrations-scripts, 'start.sh', 'stop.sh' og 'check.sh' i 'plugins/generic/lucene/embedded/bin' er muligvis ikke eksekverbare. Kontrollér adgangsmærkerne for disse filer.</li>
+			<li>Filerne i 'files/lucene/' er muligvis ikke skrivbare for din webservers bruger. Kontrollér adgangsmærkerne for disse filer.</li>
+			<li>En integreret solr-proces kører måske allerede, men under en anden OJS-bruger. Det betyder, at du ikke kan tilrette processen fra PHP.</li>
+			<li>Din PHP-konfiguration tillader muligvis ikke scriptudførelse. Kontrollér indstillingerne 'safe_mode' og 'disabled_function' i din php.ini. Hvis du ikke har adgang til din php.ini, kan du effektuere scriptene manuelt for at starte/stoppe serveren.</li>
+		</ul>]]></message>
+	<message key="plugins.generic.lucene.settings.simdocs">’Mere af samme slags’ (vis et link "lignende dokumenter" for hvert søgeresultat)</message>
+	<message key="plugins.generic.lucene.settings.solrServerSettings">Solr-serverindstillinger</message>
+	<message key="plugins.generic.lucene.settings.sortingByMetricEnabled">Sortering efter brugsstatistik (dine '{$metricName}' statistiske data vil blive brugt til at sortere efter popularitet)</message>
+	<message key="plugins.generic.lucene.settings.sortingByMetricDisabled">Sortering efter brugsstatistik (aktivér mindst én statistik-/rapporterings-plugin og vælg en "main metric" i webstedsindstillingerne for at aktivere denne indstilling)</message>
+	<message key="plugins.generic.lucene.settings.spellcheck">Alternative staveforslag (vis alternative søgeord)</message>
+	<message key="plugins.generic.lucene.settings.startStopServer">Solr server-administration</message>
+	<message key="plugins.generic.lucene.settings.startServer">Start server</message>
+	<message key="plugins.generic.lucene.settings.stopServer">Stop server</message>
+	<message key="plugins.generic.lucene.settings.updateBoostFile">Opdatér rangerings-data</message>
+	<message key="plugins.generic.lucene.settings.updateBoostFileDescription">Brugerstatistik skal kopieres regelmæssigt til Solr-serveren, f.eks. dagligt eller månedligt - afhængigt af hvor ofte du opdaterer statistikken. Det gør du ved at klikke på knappen ovenfor. Du kan også automatisere denne opgave (se 'plugins/generic/lucene/README' for detaljer).</message>
+	<message key="plugins.generic.lucene.settings.updateBoostFileDisabled"><![CDATA[Brugerstatistik skal kopieres regelmæssigt til Solr-serveren. Du kan i øjeblikket ikke opdatere brugsstatistik fra webgrænsefladen.<br/>
+		<br/>
+		Mulige årsager kan være:
+		<ul>
+			<li>Hvis du bruger pull-indeksering, vil indeksopdaterings-cron-jobbet på den eksterne server ("pull.sh") automatisk opdatere statistiske data, når de udføres (se 'plugins/generic/lucene/README' for detaljer).</li>
+			<li>Din webserver har muligvis ikke skrivetilladelser til mappen 'filer/lucene/data'. Sørg for, at både webserveren og solr-serveren har adgang til denne mappe og opdatér denne side.</li>
+		</ul>]]></message>
+	<message key="plugins.generic.lucene.settings.usageStatistics">Brugsstatistik</message>
+	<message key="plugins.generic.lucene.settings.useProxySettings">Proxy-indstillinger</message>
+	<message key="plugins.generic.lucene.settings.useProxySettingsInstructions">Brug proxy-indstillinger fra filen config.inc.php til Solr webservice-anmodninger.</message>
+	<message key="plugins.generic.lucene.settings.username">Brugernavn</message>
+	<message key="plugins.generic.lucene.settings.usernameInstructions">Solr-søgeserveren bruger HTTP BASIC-godkendelse. Indtast brugernavnet.</message>
+	<message key="plugins.generic.lucene.settings.usernameRequired">Indtast et gyldigt brugernavn for at få godkendt adgang til Solr-søgeserveren (kolonner er ikke tilladt).</message>
+	<message key="plugins.generic.lucene.sectionForm.rankingBoost">Brugerdefineret rangeringsvægtning</message>
+	<message key="plugins.generic.lucene.sectionForm.rankingBoostInstructions">Lucene/Solr-søge plugin’en gør det muligt at justere den relative vægtning af artikler i resultatlisten
+af en søgeforespørgsel. En højere (eller lavere) placeringsvægtning sætter ikke artikler i dette
+afsnit ovenfor (eller nedenfor) alle andre artikler. Men de vil 
+rangere bedre (eller værre) end de ellers ville
+uden den foretagne justering. Ved at vælge muligheden "vis aldrig" udelukkes artikler helt
+i dette afsnit fra søgeresultater.</message>
+	<message key="plugins.generic.lucene.sectionForm.rankingBoostInvalid">Vælg en gyldig brugerdefineret rangerinsvægtning.</message>
+	<message key="plugins.generic.lucene.sectionForm.ranking.never">Vis aldrig</message>
+	<message key="plugins.generic.lucene.sectionForm.ranking.low">Rangér lavere</message>
+	<message key="plugins.generic.lucene.sectionForm.ranking.normal">Normal</message>
+	<message key="plugins.generic.lucene.sectionForm.ranking.high">Rangér højere</message>
+</locale>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE email_texts SYSTEM "../../../../../lib/pkp/dtd/emailTemplateData.dtd">
+
+<!--
+  * emailTemplateData.xml
+  *
+  * Copyright (c) 2003-2019 Simon Fraser University
+  * Copyright (c) 2003-2019 John Willinsky
+  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+  *
+  * Localized email templates XML file.
+  -->
+<email_texts locale="da_DK">
+	<email_text key="LUCENE_ARTICLE_INDEXING_ERROR_NOTIFICATION">
+		<subject>Artikelindekseringsfejl</subject>
+		<body><![CDATA[Der opstod en indekseringsfejl under opdatering af artiklens indeks.<br />
+<br />
+Fejlmeddelelsen genereret af webtjenesten (hvis nogen): &quot;{$error}&quot;<br />
+<br />
+Denne e-mail blev genereret af Open Journal Systems' Lucene-søge-plugin.]]></body>
+		<description>Denne e-mail-skabelon bruges til at underrette den tekniske kontaktperson hos det tidsskrift, hvor der opstod en fejl under artikelindekseringen.</description>
+	</email_text>
+	<email_text key="LUCENE_JOURNAL_INDEXING_ERROR_NOTIFICATION">
+		<subject>Tidsskriftsindekseringsfejl</subject>
+		<body><![CDATA[Der opstod en indekseringsfejl under indeksering af tidsskriftet &quot;{$contextName}&quot;.<br />
+<br />
+Fejlmeddelelsen genereret af webtjenesten (hvis nogen): &quot;{$error}&quot;<br />
+<br />
+Denne e-mail blev genereret af Open Journal Systems' Lucene-søge-plugin.]]></body>
+		<description>Denne e-mail-skabelon bruges til at underrette den tekniske kontaktperson hos det tidsskrift, hvor der opstod en fejl under tidsskriftsindekseringen.</description>
+	</email_text>
+	<email_text key="LUCENE_SEARCH_SERVICE_ERROR_NOTIFICATION">
+		<subject>Fejlmelding fra tidsskriftets søgetjeneste</subject>
+		<body><![CDATA[Der opstod en fejl, mens nogen forsøgte at søge i installationen &quot;{$siteName}&quot;.<br />
+<br />
+Fejlmeddelelsen genereret af webtjenesten (hvis nogen): &quot;{$error}&quot;<br />
+<br />
+Denne e-mail blev genereret af Open Journal Systems' Lucene-søge-plugin.]]></body>
+		<description>Denne e-mail-skabelon bruges til at underrette den tekniske kontaktperson hos det tidsskrift, hvor der opstod en fejl under forsøget på at få adgang til Solr-søgetjenesten.</description>
+	</email_text>
+</email_texts>
